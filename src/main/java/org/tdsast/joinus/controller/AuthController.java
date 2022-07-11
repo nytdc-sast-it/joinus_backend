@@ -53,14 +53,20 @@ public class AuthController {
         Subject currentUser = SecurityUtils.getSubject();
         if (currentUser.isAuthenticated()) {
             currentUser.logout();
+            return Response.success(null);
+        } else {
+            return Response.failure(null, "未登录", 50000);
         }
-        return Response.success(null);
     }
 
     @GetMapping("/current")
     public Response<CurrentUserResponseData> currentUser() {
         Subject currentUser = SecurityUtils.getSubject();
+        if (!currentUser.isAuthenticated()) {
+            return Response.failure(null, "未登录", 50000);
+        }
         User user = userService.getUserByUsername(currentUser.getPrincipal().toString());
-        return Response.success(new CurrentUserResponseData(user.getId(), user.getUsername(), user.getIsAdmin()));
+        return Response.success(
+                new CurrentUserResponseData(user.getId(), user.getUsername(), user.getIsAdmin()));
     }
 }
