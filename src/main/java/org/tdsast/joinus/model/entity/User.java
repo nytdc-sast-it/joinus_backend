@@ -21,16 +21,19 @@ public class User extends BaseEntity {
     @OneToOne
     @JoinColumn(nullable = true)
     private Department department;
+    @Column(nullable = false)
+    private Boolean isAdmin = false;
 
     public User() {}
 
-    public User(String username, String password, Club club, Department department, Long id,
-            Instant createdAt, Instant updatedAt) {
+    public User(String username, String password, Club club,
+            Department department, Boolean isAdmin, Long id, Instant createdAt, Instant updatedAt) {
         super(id, createdAt, updatedAt);
         this.username = username;
         this.password = password;
         this.club = club;
         this.department = department;
+        this.isAdmin = isAdmin;
     }
 
     public String getUsername() {
@@ -65,6 +68,14 @@ public class User extends BaseEntity {
         this.department = department;
     }
 
+    public Boolean getIsAdmin() {
+        return isAdmin;
+    }
+
+    public void setIsAdmin(Boolean isAdmin) {
+        this.isAdmin = isAdmin;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o)
@@ -75,11 +86,12 @@ public class User extends BaseEntity {
             return false;
         User user = (User) o;
         return Objects.equals(username, user.username) && Objects.equals(password, user.password)
-                && Objects.equals(club, user.club) && Objects.equals(department, user.department);
+                && Objects.equals(club, user.club) && Objects.equals(department, user.department)
+                && Objects.equals(isAdmin, user.isAdmin);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(super.hashCode(), username, password, club, department);
+        return Objects.hash(super.hashCode(), username, password, club, department, isAdmin);
     }
 }
