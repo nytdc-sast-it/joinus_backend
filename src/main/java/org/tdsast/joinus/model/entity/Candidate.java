@@ -15,6 +15,12 @@ public class Candidate extends BaseEntity {
     private String name;
     @Column(nullable = false)
     private String studentId;
+    @Column(nullable = false)
+    private String phone;
+    @Column(nullable = false)
+    private String qq;
+    @Column(nullable = false)
+    private String counselor;
     @OneToOne
     @JoinColumn(nullable = false)
     private Club club;
@@ -28,11 +34,15 @@ public class Candidate extends BaseEntity {
 
     public Candidate() {}
 
-    public Candidate(String name, String studentId, Club club, Department choice1,
-            Department choice2, String reason, Long id, Instant createdAt, Instant updatedAt) {
+    public Candidate(String name, String studentId, String phone,
+            String qq, String counselor, Club club, Department choice1, Department choice2, String reason, Long id,
+            Instant createdAt, Instant updatedAt) {
         super(id, createdAt, updatedAt);
         this.name = name;
         this.studentId = studentId;
+        this.phone = phone;
+        this.qq = qq;
+        this.counselor = counselor;
         this.club = club;
         this.choice1 = choice1;
         this.choice2 = choice2;
@@ -87,6 +97,30 @@ public class Candidate extends BaseEntity {
         this.reason = reason;
     }
 
+    public String getPhone() {
+        return phone;
+    }
+
+    public void setPhone(String phone) {
+        this.phone = phone;
+    }
+
+    public String getQq() {
+        return qq;
+    }
+
+    public void setQq(String qq) {
+        this.qq = qq;
+    }
+
+    public String getCounselor() {
+        return counselor;
+    }
+
+    public void setCounselor(String counselor) {
+        this.counselor = counselor;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o)
@@ -96,16 +130,15 @@ public class Candidate extends BaseEntity {
         if (!super.equals(o))
             return false;
         Candidate candidate = (Candidate) o;
-        return Objects.equals(name, candidate.name)
-                && Objects.equals(studentId, candidate.studentId)
-                && Objects.equals(club, candidate.club)
-                && Objects.equals(choice1, candidate.choice1)
-                && Objects.equals(choice2, candidate.choice2)
+        return Objects.equals(name, candidate.name) && Objects.equals(studentId, candidate.studentId)
+                && Objects.equals(phone, candidate.phone) && Objects.equals(qq, candidate.qq)
+                && Objects.equals(counselor, candidate.counselor) && Objects.equals(club, candidate.club)
+                && Objects.equals(choice1, candidate.choice1) && Objects.equals(choice2, candidate.choice2)
                 && Objects.equals(reason, candidate.reason);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(super.hashCode(), name, studentId, club, choice1, choice2, reason);
+        return Objects.hash(super.hashCode(), name, studentId, phone, qq, counselor, club, choice1, choice2, reason);
     }
 }
