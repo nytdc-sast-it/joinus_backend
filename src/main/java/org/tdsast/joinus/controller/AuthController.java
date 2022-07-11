@@ -61,6 +61,6 @@ public class AuthController {
     public Response<CurrentUserResponseData> currentUser() {
         Subject currentUser = SecurityUtils.getSubject();
         User user = userService.getUserByUsername(currentUser.getPrincipal().toString());
-        return Response.success(new CurrentUserResponseData(user.getId(), user.getUsername()));
+        return Response.success(new CurrentUserResponseData(user.getId(), user.getUsername(), user.getIsAdmin()));
     }
 }

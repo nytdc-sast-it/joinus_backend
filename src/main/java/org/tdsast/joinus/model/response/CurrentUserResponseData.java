@@ -7,10 +7,13 @@ public class CurrentUserResponseData extends ResponseData implements Serializabl
 
     private Long id;
     private String username;
+    private Boolean isAdmin;
+    private String avatar = "https://gw.alipayobjects.com/zos/antfincdn/XAosXuNZyF/BiazfanxmamNRoxxVxka.png";
 
-    public CurrentUserResponseData(Long id, String username) {
+    public CurrentUserResponseData(Long id, String username, Boolean isAdmin) {
         this.id = id;
         this.username = username;
+        this.isAdmin = isAdmin;
     }
 
     public Long getId() {
@@ -29,4 +32,19 @@ public class CurrentUserResponseData extends ResponseData implements Serializabl
         this.username = username;
     }
 
+    public String getAvatar() {
+        return avatar;
+    }
+
+    public void setAvatar(String avatar) {
+        this.avatar = avatar;
+    }
+
+    public Boolean getIsAdmin() {
+        return isAdmin;
+    }
+
+    public void setIsAdmin(Boolean isAdmin) {
+        this.isAdmin = isAdmin;
+    }
 }
