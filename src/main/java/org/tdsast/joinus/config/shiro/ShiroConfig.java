@@ -22,8 +22,7 @@ public class ShiroConfig {
         ShiroFilterFactoryBean factoryBean = new ShiroFilterFactoryBean();
         factoryBean.setSecurityManager(manager);
         Map<String, String> map = new HashMap<>();
-        map.put("/auth/**", "authc");
-        map.put("/auth/login", "anon");
+        map.put("/auth/**", "anon");
         factoryBean.setFilterChainDefinitionMap(map);
         return factoryBean;
     }
