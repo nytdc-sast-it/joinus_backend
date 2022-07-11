@@ -1,5 +1,6 @@
 package org.tdsast.joinus.service;
 
+import java.util.List;
 import org.springframework.stereotype.Service;
 import org.tdsast.joinus.model.entity.Candidate;
 import org.tdsast.joinus.repository.CandidateRepository;
@@ -10,6 +11,10 @@ public class CandidateService {
 
     public CandidateService(CandidateRepository candidateRepository) {
         this.candidateRepository = candidateRepository;
+    }
+
+    public List<Candidate> getCandidates() {
+        return candidateRepository.findAll();
     }
 
     public Candidate newCandidate(Candidate candidate) {

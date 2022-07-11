@@ -1,5 +1,6 @@
 package org.tdsast.joinus.service;
 
+import java.util.List;
 import org.springframework.stereotype.Service;
 import org.tdsast.joinus.model.entity.Club;
 import org.tdsast.joinus.model.entity.Department;
@@ -13,6 +14,10 @@ public class UserService {
 
     public UserService(UserRepository userRepository) {
         this.userRepository = userRepository;
+    }
+
+    public List<User> getUsers() {
+        return userRepository.findAll();
     }
 
     public User getUserByUsername(String username) {
