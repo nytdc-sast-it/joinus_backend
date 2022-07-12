@@ -21,7 +21,6 @@ import org.tdsast.joinus.model.request.CandidateRequest;
 import org.tdsast.joinus.model.response.CandidateListResponseData;
 import org.tdsast.joinus.model.response.Response;
 import org.tdsast.joinus.model.response.ResponseData;
-import org.tdsast.joinus.model.response.UserListResponseData;
 import org.tdsast.joinus.service.CandidateService;
 import org.tdsast.joinus.service.ClubService;
 import org.tdsast.joinus.service.DepartmentService;
@@ -62,17 +61,9 @@ public class CandidateController {
         Club club = clubIdToClub(request.getClub());
         Department choice1 = departmentIdToDepartment(club.getId(), request.getChoice1());
         Department choice2 = departmentIdToDepartment(club.getId(), request.getChoice2());
-        return new Candidate(
-                request.getName(),
-                request.getStudentId(),
-                request.getPhone(),
-                request.getQq(),
-                request.getCounselor(),
-                club,
-                choice1,
-                choice2,
-                request.getReason(),
-                null, null, null);
+        return new Candidate(request.getName(), request.getStudentId(), request.getPhone(),
+                request.getQq(), request.getMajor(), request.getCounselor(), club, choice1, choice2,
+                request.getReason(), null, null, null);
     }
 
     @PostMapping("/join")
@@ -90,9 +81,10 @@ public class CandidateController {
 
     private CandidateDTO candidateToCandidateDTO(Candidate candidate) {
         return new CandidateDTO(candidate.getId(), candidate.getName(), candidate.getStudentId(),
-                candidate.getPhone(), candidate.getQq(), candidate.getCounselor(),
-                candidate.getClub().getName(), candidate.getChoice1().getName(),
-                candidate.getChoice2().getName(), candidate.getReason(), candidate.getCreatedAt());
+                candidate.getPhone(), candidate.getQq(), candidate.getMajor(),
+                candidate.getCounselor(), candidate.getClub().getName(),
+                candidate.getChoice1().getName(), candidate.getChoice2().getName(),
+                candidate.getReason(), candidate.getCreatedAt());
     }
 
     @GetMapping("/list")

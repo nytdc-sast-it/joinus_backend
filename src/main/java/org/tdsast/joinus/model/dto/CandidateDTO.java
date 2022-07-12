@@ -12,6 +12,7 @@ public class CandidateDTO implements Serializable {
     private String studentId;
     private String phone;
     private String qq;
+    private String major;
     private String counselor;
     private String club;
     private String choice1;
@@ -22,13 +23,14 @@ public class CandidateDTO implements Serializable {
     private Instant createdTime;
 
     public CandidateDTO(Long id, String name, String studentId, String phone, String qq,
-            String counselor, String club, String choice1, String choice2, String reason,
-            Instant createdTime) {
+            String major, String counselor, String club, String choice1, String choice2,
+            String reason, Instant createdTime) {
         this.id = id;
         this.name = name;
         this.studentId = studentId;
         this.phone = phone;
         this.qq = qq;
+        this.major = major;
         this.counselor = counselor;
         this.club = club;
         this.choice1 = choice1;
@@ -75,6 +77,14 @@ public class CandidateDTO implements Serializable {
 
     public void setQq(String qq) {
         this.qq = qq;
+    }
+
+    public String getMajor() {
+        return major;
+    }
+
+    public void setMajor(String major) {
+        this.major = major;
     }
 
     public String getCounselor() {

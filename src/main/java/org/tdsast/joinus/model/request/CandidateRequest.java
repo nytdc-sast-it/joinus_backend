@@ -14,21 +14,23 @@ public class CandidateRequest {
     @Size(min = 5, max = 12)
     private String qq;
     @NotBlank
+    private String major;
+    @NotBlank
     private String counselor;
     private Long club;
     private Long choice1;
     private Long choice2;
     private String reason;
 
-    public CandidateRequest() {
-    }
+    public CandidateRequest() {}
 
-    public CandidateRequest(String name, String studentId, String phone, String qq, String counselor, Long club,
-            Long choice1, Long choice2, String reason) {
+    public CandidateRequest(String name, String studentId, String phone, String qq, String major,
+            String counselor, Long club, Long choice1, Long choice2, String reason) {
         this.name = name;
         this.studentId = studentId;
         this.phone = phone;
         this.qq = qq;
+        this.major = major;
         this.counselor = counselor;
         this.club = club;
         this.choice1 = choice1;
@@ -106,5 +108,13 @@ public class CandidateRequest {
 
     public void setReason(String reason) {
         this.reason = reason;
+    }
+
+    public String getMajor() {
+        return major;
+    }
+
+    public void setMajor(String major) {
+        this.major = major;
     }
 }
