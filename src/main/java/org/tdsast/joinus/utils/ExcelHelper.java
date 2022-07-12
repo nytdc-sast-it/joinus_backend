@@ -30,10 +30,10 @@ public class ExcelHelper {
                 Cell cell = headerRow.createCell(col);
                 cell.setCellValue(HEADER[col]);
             }
-            int rowIdx = 1;
+            int rowIdx = 0;
             for (Candidate candidate : candidates) {
-                Row row = sheet.createRow(rowIdx++);
-                row.createCell(0).setCellValue(candidate.getId());
+                Row row = sheet.createRow(++rowIdx);
+                row.createCell(0).setCellValue(rowIdx);
                 row.createCell(1).setCellValue(candidate.getName());
                 row.createCell(2).setCellValue(candidate.getStudentId());
                 row.createCell(3).setCellValue(candidate.getPhone());
