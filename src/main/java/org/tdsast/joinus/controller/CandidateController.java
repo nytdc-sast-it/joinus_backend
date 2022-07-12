@@ -4,7 +4,8 @@ import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
 import javax.validation.Valid;
-
+import org.apache.shiro.SecurityUtils;
+import org.apache.shiro.subject.Subject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -17,6 +18,7 @@ import org.tdsast.joinus.model.dto.CandidateDTO;
 import org.tdsast.joinus.model.entity.Candidate;
 import org.tdsast.joinus.model.entity.Club;
 import org.tdsast.joinus.model.entity.Department;
+import org.tdsast.joinus.model.entity.User;
 import org.tdsast.joinus.model.request.CandidateRequest;
 import org.tdsast.joinus.model.response.CandidateListResponseData;
 import org.tdsast.joinus.model.response.Response;
@@ -24,6 +26,7 @@ import org.tdsast.joinus.model.response.ResponseData;
 import org.tdsast.joinus.service.CandidateService;
 import org.tdsast.joinus.service.ClubService;
 import org.tdsast.joinus.service.DepartmentService;
+import org.tdsast.joinus.service.UserService;
 
 @RestController
 @RequestMapping("/candidate")
@@ -33,12 +36,14 @@ public class CandidateController {
     private final CandidateService candidateService;
     private final ClubService clubService;
     private final DepartmentService departmentService;
+    private final UserService userService;
 
     public CandidateController(CandidateService candidateService, ClubService clubService,
-            DepartmentService departmentService) {
+            DepartmentService departmentService, UserService userService) {
         this.candidateService = candidateService;
         this.clubService = clubService;
         this.departmentService = departmentService;
+        this.userService = userService;
     }
 
     private Club clubIdToClub(Long clubId) {
@@ -89,10 +94,24 @@ public class CandidateController {
 
     @GetMapping("/list")
     public Response<CandidateListResponseData> list(@RequestParam int current,
-            @RequestParam int pageSize, @RequestParam(required = false) String name) {
-        List<CandidateDTO> list = candidateService.getCandidates(current, pageSize, name).stream()
-                .map(this::candidateToCandidateDTO).collect(Collectors.toList());
-        long total = candidateService.getCandidatesCount(name);
+            @RequestParam int pageSize, @RequestParam(required = false) String name,
+            @RequestParam(name = "club", required = false) Long clubId) {
+        Subject currentUser = SecurityUtils.getSubject();
+        User user = userService.getUserByUsername(currentUser.getPrincipal().toString());
+        if (Boolean.FALSE.equals(user.getIsAdmin()) && user.getClub() != null) {
+            clubId = user.getClub().getId();
+        }
+        Club club = null;
+        if (clubId != null) {
+            try {
+                club = clubIdToClub(clubId);
+            } catch (IllegalArgumentException e) {
+                return Response.failure(null, e.getMessage(), 50000);
+            }
+        }
+        List<CandidateDTO> list = candidateService.getCandidates(current, pageSize, name, club)
+                .stream().map(this::candidateToCandidateDTO).collect(Collectors.toList());
+        long total = candidateService.getCandidatesCount(name, club);
         return Response.success(new CandidateListResponseData(list, total));
     }
 }

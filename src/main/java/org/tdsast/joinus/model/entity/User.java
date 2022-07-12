@@ -16,7 +16,7 @@ public class User extends BaseEntity {
     @Column(nullable = false)
     private String password;
     @OneToOne
-    @JoinColumn(nullable = true)
+    @JoinColumn(nullable = false)
     private Club club;
     @OneToOne
     @JoinColumn(nullable = true)

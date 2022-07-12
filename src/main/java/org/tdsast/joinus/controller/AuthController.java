@@ -14,6 +14,8 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import org.tdsast.joinus.model.dto.ClubDTO;
+import org.tdsast.joinus.model.entity.Club;
 import org.tdsast.joinus.model.entity.User;
 import org.tdsast.joinus.model.request.AuthLoginRequest;
 import org.tdsast.joinus.model.response.AuthLoginResponseData;
@@ -59,6 +61,13 @@ public class AuthController {
         }
     }
 
+    private ClubDTO clubToClubDTO(Club club) {
+        if (club == null) {
+            return null;
+        }
+        return new ClubDTO(club.getId(), club.getName());
+    }
+
     @GetMapping("/current")
     public Response<CurrentUserResponseData> currentUser() {
         Subject currentUser = SecurityUtils.getSubject();
@@ -66,7 +75,7 @@ public class AuthController {
             return Response.failure(null, "未登录", 50000);
         }
         User user = userService.getUserByUsername(currentUser.getPrincipal().toString());
-        return Response.success(
-                new CurrentUserResponseData(user.getId(), user.getUsername(), user.getIsAdmin()));
+        return Response.success(new CurrentUserResponseData(user.getId(), user.getUsername(),
+                user.getIsAdmin(), clubToClubDTO(user.getClub())));
     }
 }

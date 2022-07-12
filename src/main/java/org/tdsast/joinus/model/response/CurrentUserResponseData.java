@@ -1,6 +1,7 @@
 package org.tdsast.joinus.model.response;
 
 import java.io.Serializable;
+import org.tdsast.joinus.model.dto.ClubDTO;
 
 public class CurrentUserResponseData extends ResponseData implements Serializable {
     private static final long serialVersionUID = 1L;
@@ -8,12 +9,14 @@ public class CurrentUserResponseData extends ResponseData implements Serializabl
     private Long id;
     private String username;
     private Boolean isAdmin;
+    private ClubDTO club;
     private String avatar = "https://gw.alipayobjects.com/zos/antfincdn/XAosXuNZyF/BiazfanxmamNRoxxVxka.png";
 
-    public CurrentUserResponseData(Long id, String username, Boolean isAdmin) {
+    public CurrentUserResponseData(Long id, String username, Boolean isAdmin, ClubDTO club) {
         this.id = id;
         this.username = username;
         this.isAdmin = isAdmin;
+        this.club = club;
     }
 
     public Long getId() {
@@ -46,5 +49,13 @@ public class CurrentUserResponseData extends ResponseData implements Serializabl
 
     public void setIsAdmin(Boolean isAdmin) {
         this.isAdmin = isAdmin;
+    }
+
+    public ClubDTO getClub() {
+        return club;
+    }
+
+    public void setClub(ClubDTO club) {
+        this.club = club;
     }
 }

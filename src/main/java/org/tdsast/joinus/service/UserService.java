@@ -28,7 +28,7 @@ public class UserService {
         return userRepository.findByUsername(username).isPresent();
     }
 
-    public User addUser(String username, String password, Club club, Department department) {
+    public User addUser(String username, String password, Club club) {
         if (isUserExist(username)) {
             throw new IllegalArgumentException("User " + username + " already exist");
         }
@@ -36,7 +36,6 @@ public class UserService {
         user.setUsername(username);
         user.setPassword(AuthUtils.getEnPsssword(username, password));
         user.setClub(club);
-        user.setDepartment(department);
         return userRepository.save(user);
     }
 }
