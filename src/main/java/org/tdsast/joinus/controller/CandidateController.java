@@ -1,5 +1,6 @@
 package org.tdsast.joinus.controller;
 
+import java.time.Instant;
 import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
@@ -8,6 +9,11 @@ import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.subject.Subject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.core.io.InputStreamResource;
+import org.springframework.core.io.Resource;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -27,6 +33,7 @@ import org.tdsast.joinus.service.CandidateService;
 import org.tdsast.joinus.service.ClubService;
 import org.tdsast.joinus.service.DepartmentService;
 import org.tdsast.joinus.service.UserService;
+import org.tdsast.joinus.utils.ExcelHelper;
 
 @RestController
 @RequestMapping("/candidate")
@@ -113,5 +120,28 @@ public class CandidateController {
                 .stream().map(this::candidateToCandidateDTO).collect(Collectors.toList());
         long total = candidateService.getCandidatesCount(name, club);
         return Response.success(new CandidateListResponseData(list, total));
+    }
+
+    @GetMapping("/export")
+    public ResponseEntity<Resource> export(@RequestParam(required = false) String name,
+            @RequestParam(name = "club", required = false) Long clubId) {
+        Subject currentUser = SecurityUtils.getSubject();
+        User user = userService.getUserByUsername(currentUser.getPrincipal().toString());
+        if (Boolean.FALSE.equals(user.getIsAdmin()) && user.getClub() != null) {
+            clubId = user.getClub().getId();
+        }
+        Club club = null;
+        if (clubId != null) {
+            try {
+                club = clubIdToClub(clubId);
+            } catch (IllegalArgumentException e) {
+                return ResponseEntity.badRequest().body(null);
+            }
+        }
+        InputStreamResource file = new InputStreamResource(candidateService.export(name, club));
+        return ResponseEntity.ok()
+                .header(HttpHeaders.CONTENT_DISPOSITION,
+                        "attachment; filename=" + Instant.now() + ".xlsx")
+                .contentType(MediaType.parseMediaType(ExcelHelper.TYPE)).body(file);
     }
 }

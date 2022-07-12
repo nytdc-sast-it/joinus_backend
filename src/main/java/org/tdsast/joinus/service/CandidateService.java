@@ -1,5 +1,6 @@
 package org.tdsast.joinus.service;
 
+import java.io.ByteArrayInputStream;
 import java.util.List;
 import org.springframework.data.domain.Example;
 import org.springframework.data.domain.ExampleMatcher;
@@ -8,6 +9,7 @@ import org.springframework.stereotype.Service;
 import org.tdsast.joinus.model.entity.Candidate;
 import org.tdsast.joinus.model.entity.Club;
 import org.tdsast.joinus.repository.CandidateRepository;
+import org.tdsast.joinus.utils.ExcelHelper;
 
 @Service
 public class CandidateService {
@@ -51,5 +53,10 @@ public class CandidateService {
 
     public Candidate newCandidate(Candidate candidate) {
         return candidateRepository.save(candidate);
+    }
+
+    public ByteArrayInputStream export(String name, Club club) {
+        List<Candidate> candidates = getCandidates(0, 0, name, club);
+        return ExcelHelper.candidatesToExcel(candidates);
     }
 }
