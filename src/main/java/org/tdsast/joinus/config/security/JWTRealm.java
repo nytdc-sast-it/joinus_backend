@@ -11,10 +11,10 @@ import org.apache.shiro.subject.PrincipalCollection;
 import org.tdsast.joinus.model.entity.User;
 import org.tdsast.joinus.service.UserService;
 
-import javax.inject.Inject;
+import javax.annotation.Resource;
 
 public class JWTRealm extends AuthorizingRealm {
-    @Inject
+    @Resource
     private UserService userService;
 
     @Override
