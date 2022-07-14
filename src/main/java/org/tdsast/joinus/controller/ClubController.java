@@ -1,6 +1,8 @@
 package org.tdsast.joinus.controller;
 
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -43,5 +45,11 @@ public class ClubController {
     public Response<ClubResponseData> newClub(@RequestBody @Valid NewClubRequest request) {
         Club club = clubService.newClub(request.getName());
         return Response.success(new ClubResponseData(clubToClubDTO(club)));
+    }
+
+    @DeleteMapping("/{clubId}")
+    public Response<ClubResponseData> removeClub(@PathVariable Long clubId) {
+        clubService.removeClub(clubId);
+        return Response.success(new ClubResponseData(null));
     }
 }

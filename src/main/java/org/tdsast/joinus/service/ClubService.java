@@ -28,11 +28,22 @@ public class ClubService {
         return clubRepository.existsByName(name);
     }
 
+    public boolean isClubExist(Long id) {
+        return clubRepository.existsById(id);
+    }
+
     public Club newClub(String name) {
         if (isClubExist(name)) {
             throw new IllegalArgumentException("社团已存在");
         }
         Club club = new Club(name, null, null, null);
         return clubRepository.save(club);
+    }
+
+    public void removeClub(Long clubId) {
+        if (!isClubExist(clubId)) {
+            throw new IllegalArgumentException("社团不存在");
+        }
+        clubRepository.deleteById(clubId);
     }
 }
