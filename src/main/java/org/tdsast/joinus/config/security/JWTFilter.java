@@ -1,10 +1,15 @@
 package org.tdsast.joinus.config.security;
 
-import org.apache.shiro.authc.AuthenticationException;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.apache.shiro.web.filter.authc.BasicHttpAuthenticationFilter;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.tdsast.joinus.model.response.Response;
+import org.tdsast.joinus.model.response.ResponseData;
 
 import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
@@ -12,6 +17,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 public class JWTFilter extends BasicHttpAuthenticationFilter {
+    private final Logger logger = LoggerFactory.getLogger(getClass());
+
     @Override
     protected boolean isAccessAllowed(ServletRequest request, ServletResponse response, Object mappedValue) {
         if (isLoginAttempt(request, response)) {
@@ -35,10 +42,22 @@ public class JWTFilter extends BasicHttpAuthenticationFilter {
             JWTToken token = new JWTToken(req.getHeader("Authorization"));
             // 委托给Realm进行验证
             getSubject(request, response).login(token);
-            return true;
         } else {
-            throw new AuthenticationException("请先登录");
+            response.setContentType("application/json;charset=utf-8");
+            Response<ResponseData> res = Response.failure(null, "请先登录", 50000);
+            ObjectMapper om = new ObjectMapper();
+            String s = "";
+            try {
+                s = om.writeValueAsString(res);
+                response.getWriter().write(s);
+            } catch (JsonProcessingException e) {
+                logger.error("JsonProcessingException", e);
+            } catch (Exception e) {
+                logger.error("Exception", e);
+            }
+            return false;
         }
+        return true;
     }
 
     /**

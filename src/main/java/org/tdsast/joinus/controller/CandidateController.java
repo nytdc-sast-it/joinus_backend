@@ -104,7 +104,6 @@ public class CandidateController {
     }
 
     @GetMapping("/list")
-    @RequiresAuthentication
     public Response<CandidateListResponseData> list(@RequestParam int current,
             @RequestParam int pageSize, @RequestParam(required = false) String name,
             @RequestParam(name = "club", required = false) Long clubId) {
@@ -115,11 +114,7 @@ public class CandidateController {
         }
         Club club = null;
         if (clubId != null) {
-            try {
-                club = clubIdToClub(clubId);
-            } catch (IllegalArgumentException e) {
-                return Response.failure(null, e.getMessage(), 50000);
-            }
+            club = clubIdToClub(clubId);
         }
         List<CandidateDTO> list = candidateService.getCandidates(current, pageSize, name, club)
                 .stream().map(this::candidateToCandidateDTO).collect(Collectors.toList());
@@ -128,7 +123,6 @@ public class CandidateController {
     }
 
     @GetMapping("/export")
-    @RequiresAuthentication
     public ResponseEntity<Resource> export(@RequestParam(required = false) String name,
             @RequestParam(name = "club", required = false) Long clubId) {
         String currentUsername = JWTUtils.getUsernameFromToken((String) SecurityUtils.getSubject().getPrincipal());
