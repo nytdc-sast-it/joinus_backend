@@ -1,12 +1,11 @@
 package org.tdsast.joinus.service;
 
-import java.util.List;
-
 import org.springframework.stereotype.Service;
 import org.tdsast.joinus.model.entity.Club;
 import org.tdsast.joinus.repository.ClubRepository;
 
 import javax.inject.Inject;
+import java.util.List;
 
 @Service
 public class ClubService {
@@ -23,5 +22,17 @@ public class ClubService {
 
     public Club getClubById(Long clubId) {
         return clubRepository.findById(clubId).orElse(null);
+    }
+
+    public boolean isClubExist(String name) {
+        return clubRepository.existsByName(name);
+    }
+
+    public Club newClub(String name) {
+        if (isClubExist(name)) {
+            throw new IllegalArgumentException("社团已存在");
+        }
+        Club club = new Club(name, null, null, null);
+        return clubRepository.save(club);
     }
 }

@@ -1,18 +1,22 @@
 package org.tdsast.joinus.controller;
 
-import java.util.List;
-import java.util.stream.Collectors;
-
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.tdsast.joinus.model.dto.ClubDTO;
 import org.tdsast.joinus.model.entity.Club;
+import org.tdsast.joinus.model.request.NewClubRequest;
 import org.tdsast.joinus.model.response.ClubListResponseData;
+import org.tdsast.joinus.model.response.ClubResponseData;
 import org.tdsast.joinus.model.response.Response;
 import org.tdsast.joinus.service.ClubService;
 
 import javax.inject.Inject;
+import javax.validation.Valid;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/club")
@@ -33,5 +37,11 @@ public class ClubController {
         List<ClubDTO> list = clubService.getClubs().stream().map(this::clubToClubDTO)
             .collect(Collectors.toList());
         return Response.success(new ClubListResponseData(list));
+    }
+
+    @PostMapping("/new")
+    public Response<ClubResponseData> newClub(@RequestBody @Valid NewClubRequest request) {
+        Club club = clubService.newClub(request.getName());
+        return Response.success(new ClubResponseData(clubToClubDTO(club)));
     }
 }
