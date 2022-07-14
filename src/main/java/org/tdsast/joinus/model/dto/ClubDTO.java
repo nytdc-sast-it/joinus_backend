@@ -1,6 +1,8 @@
 package org.tdsast.joinus.model.dto;
 
-public class ClubDTO {
+import java.io.Serializable;
+
+public class ClubDTO implements Serializable {
     private Long id;
     private String name;
 
