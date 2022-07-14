@@ -1,14 +1,17 @@
 package org.tdsast.joinus.service;
 
-import java.util.List;
 import org.springframework.stereotype.Service;
 import org.tdsast.joinus.model.entity.Club;
 import org.tdsast.joinus.repository.ClubRepository;
+
+import javax.inject.Inject;
+import java.util.List;
 
 @Service
 public class ClubService {
     private final ClubRepository clubRepository;
 
+    @Inject
     public ClubService(ClubRepository clubRepository) {
         this.clubRepository = clubRepository;
     }

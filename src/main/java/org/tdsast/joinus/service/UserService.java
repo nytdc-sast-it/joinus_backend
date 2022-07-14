@@ -6,12 +6,14 @@ import org.tdsast.joinus.model.entity.User;
 import org.tdsast.joinus.repository.UserRepository;
 import org.tdsast.joinus.utils.AuthUtils;
 
+import javax.inject.Inject;
 import java.util.List;
 
 @Service
 public class UserService {
     private final UserRepository userRepository;
 
+    @Inject
     public UserService(UserRepository userRepository) {
         this.userRepository = userRepository;
     }

@@ -31,6 +31,7 @@ import org.tdsast.joinus.service.DepartmentService;
 import org.tdsast.joinus.service.UserService;
 import org.tdsast.joinus.utils.ExcelHelper;
 
+import javax.inject.Inject;
 import javax.validation.Valid;
 import java.time.Instant;
 import java.util.List;
@@ -47,8 +48,9 @@ public class CandidateController {
     private final DepartmentService departmentService;
     private final UserService userService;
 
+    @Inject
     public CandidateController(CandidateService candidateService, ClubService clubService,
-            DepartmentService departmentService, UserService userService) {
+                               DepartmentService departmentService, UserService userService) {
         this.candidateService = candidateService;
         this.clubService = clubService;
         this.departmentService = departmentService;

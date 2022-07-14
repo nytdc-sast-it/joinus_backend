@@ -8,12 +8,13 @@ import org.apache.shiro.authz.AuthorizationInfo;
 import org.apache.shiro.authz.SimpleAuthorizationInfo;
 import org.apache.shiro.realm.AuthorizingRealm;
 import org.apache.shiro.subject.PrincipalCollection;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.tdsast.joinus.model.entity.User;
 import org.tdsast.joinus.service.UserService;
 
+import javax.inject.Inject;
+
 public class JWTRealm extends AuthorizingRealm {
-    @Autowired
+    @Inject
     private UserService userService;
 
     @Override

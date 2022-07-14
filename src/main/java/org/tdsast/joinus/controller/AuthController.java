@@ -2,11 +2,9 @@ package org.tdsast.joinus.controller;
 
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.AuthenticationException;
-import org.apache.shiro.authz.annotation.RequiresAuthentication;
 import org.apache.shiro.subject.Subject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -24,6 +22,7 @@ import org.tdsast.joinus.model.response.ResponseData;
 import org.tdsast.joinus.service.UserService;
 import org.tdsast.joinus.utils.AuthUtils;
 
+import javax.inject.Inject;
 import javax.validation.Valid;
 
 @RestController
@@ -31,8 +30,12 @@ import javax.validation.Valid;
 public class AuthController {
     private Logger logger = LoggerFactory.getLogger(getClass());
 
-    @Autowired
-    private UserService userService;
+    private final UserService userService;
+
+    @Inject
+    public AuthController(UserService userService) {
+        this.userService = userService;
+    }
 
     @PostMapping("/login")
     public Response<AuthLoginResponseData> login(@RequestBody @Valid AuthLoginRequest request) {
@@ -71,14 +74,9 @@ public class AuthController {
     }
 
     @GetMapping("/current")
-    @RequiresAuthentication
     public Response<CurrentUserResponseData> currentUser() {
-        Subject currentUser = SecurityUtils.getSubject();
-        if (!currentUser.isAuthenticated()) {
-            return Response.failure(null, "未登录", 50000);
-        }
-        String username = JWTUtils.getUsernameFromToken((String) currentUser.getPrincipal());
-        User user = userService.getUserByUsername(username);
+        String currentUsername = JWTUtils.getUsernameFromToken((String) SecurityUtils.getSubject().getPrincipal());
+        User user = userService.getUserByUsername(currentUsername);
         return Response.success(new CurrentUserResponseData(user.getId(), user.getUsername(),
             user.getIsAdmin(), clubToClubDTO(user.getClub())));
     }
