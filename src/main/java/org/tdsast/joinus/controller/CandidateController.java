@@ -1,12 +1,7 @@
 package org.tdsast.joinus.controller;
 
-import java.time.Instant;
-import java.util.List;
-import java.util.Objects;
-import java.util.stream.Collectors;
-import javax.validation.Valid;
 import org.apache.shiro.SecurityUtils;
-import org.apache.shiro.subject.Subject;
+import org.apache.shiro.authz.annotation.RequiresAuthentication;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.core.io.InputStreamResource;
@@ -20,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import org.tdsast.joinus.config.security.JWTUtils;
 import org.tdsast.joinus.model.dto.CandidateDTO;
 import org.tdsast.joinus.model.entity.Candidate;
 import org.tdsast.joinus.model.entity.Club;
@@ -34,6 +30,12 @@ import org.tdsast.joinus.service.ClubService;
 import org.tdsast.joinus.service.DepartmentService;
 import org.tdsast.joinus.service.UserService;
 import org.tdsast.joinus.utils.ExcelHelper;
+
+import javax.validation.Valid;
+import java.time.Instant;
+import java.util.List;
+import java.util.Objects;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/candidate")
@@ -100,11 +102,12 @@ public class CandidateController {
     }
 
     @GetMapping("/list")
+    @RequiresAuthentication
     public Response<CandidateListResponseData> list(@RequestParam int current,
             @RequestParam int pageSize, @RequestParam(required = false) String name,
             @RequestParam(name = "club", required = false) Long clubId) {
-        Subject currentUser = SecurityUtils.getSubject();
-        User user = userService.getUserByUsername(currentUser.getPrincipal().toString());
+        String currentUsername = JWTUtils.getUsernameFromToken((String) SecurityUtils.getSubject().getPrincipal());
+        User user = userService.getUserByUsername(currentUsername);
         if (Boolean.FALSE.equals(user.getIsAdmin()) && user.getClub() != null) {
             clubId = user.getClub().getId();
         }
@@ -123,10 +126,11 @@ public class CandidateController {
     }
 
     @GetMapping("/export")
+    @RequiresAuthentication
     public ResponseEntity<Resource> export(@RequestParam(required = false) String name,
             @RequestParam(name = "club", required = false) Long clubId) {
-        Subject currentUser = SecurityUtils.getSubject();
-        User user = userService.getUserByUsername(currentUser.getPrincipal().toString());
+        String currentUsername = JWTUtils.getUsernameFromToken((String) SecurityUtils.getSubject().getPrincipal());
+        User user = userService.getUserByUsername(currentUsername);
         if (Boolean.FALSE.equals(user.getIsAdmin()) && user.getClub() != null) {
             clubId = user.getClub().getId();
         }

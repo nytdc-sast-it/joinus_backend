@@ -1,12 +1,12 @@
 package org.tdsast.joinus.service;
 
-import java.util.List;
 import org.springframework.stereotype.Service;
 import org.tdsast.joinus.model.entity.Club;
-import org.tdsast.joinus.model.entity.Department;
 import org.tdsast.joinus.model.entity.User;
 import org.tdsast.joinus.repository.UserRepository;
 import org.tdsast.joinus.utils.AuthUtils;
+
+import java.util.List;
 
 @Service
 public class UserService {
@@ -34,7 +34,7 @@ public class UserService {
         }
         User user = new User();
         user.setUsername(username);
-        user.setPassword(AuthUtils.getEnPsssword(username, password));
+        user.setPassword(AuthUtils.getEnPassword(username, password));
         user.setClub(club);
         return userRepository.save(user);
     }
