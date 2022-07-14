@@ -26,10 +26,8 @@ dependencies {
     implementation 'com.auth0:java-jwt:4.0.0'
     implementation 'org.apache.poi:poi-ooxml:5.2.2'
     implementation 'javax.inject:javax.inject:1'
-    compileOnly 'org.projectlombok:lombok'
     developmentOnly 'org.springframework.boot:spring-boot-devtools'
     runtimeOnly 'org.postgresql:postgresql'
-    annotationProcessor 'org.projectlombok:lombok'
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
 }
 
