@@ -30,10 +30,14 @@ public class ShiroConfig {
         // 拦截器
         Map<String, String> filterChainDefinitionMap = new LinkedHashMap<>();
 
-        filterChainDefinitionMap.put("/auth/login", "anon");
-        filterChainDefinitionMap.put("/candidate/join", "anon");
+        filterChainDefinitionMap.put("/auth/current", "jwt");
+        filterChainDefinitionMap.put("/candidate/list", "jwt");
         filterChainDefinitionMap.put("/club/list", "anon");
-        filterChainDefinitionMap.put("/**", "jwt");
+        filterChainDefinitionMap.put("/club/**", "jwt");
+        filterChainDefinitionMap.put("/department/list", "anon");
+        filterChainDefinitionMap.put("/department/**", "jwt");
+        filterChainDefinitionMap.put("/user/**", "jwt");
+        filterChainDefinitionMap.put("/**", "anon");
 
         shiroFilterFactoryBean.setFilterChainDefinitionMap(filterChainDefinitionMap);
         return shiroFilterFactoryBean;
