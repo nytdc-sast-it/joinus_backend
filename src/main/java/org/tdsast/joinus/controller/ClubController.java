@@ -1,5 +1,8 @@
 package org.tdsast.joinus.controller;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -10,8 +13,6 @@ import org.tdsast.joinus.model.response.Response;
 import org.tdsast.joinus.service.ClubService;
 
 import javax.inject.Inject;
-import java.util.List;
-import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/club")

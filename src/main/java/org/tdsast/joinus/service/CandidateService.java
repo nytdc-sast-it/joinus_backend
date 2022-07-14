@@ -1,5 +1,8 @@
 package org.tdsast.joinus.service;
 
+import java.io.ByteArrayInputStream;
+import java.util.List;
+
 import org.springframework.data.domain.Example;
 import org.springframework.data.domain.ExampleMatcher;
 import org.springframework.data.domain.PageRequest;
@@ -10,8 +13,6 @@ import org.tdsast.joinus.repository.CandidateRepository;
 import org.tdsast.joinus.utils.ExcelHelper;
 
 import javax.inject.Inject;
-import java.io.ByteArrayInputStream;
-import java.util.List;
 
 @Service
 public class CandidateService {
