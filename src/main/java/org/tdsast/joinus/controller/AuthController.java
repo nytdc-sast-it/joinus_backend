@@ -2,9 +2,6 @@ package org.tdsast.joinus.controller;
 
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.AuthenticationException;
-import org.apache.shiro.subject.Subject;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -18,7 +15,6 @@ import org.tdsast.joinus.model.request.AuthLoginRequest;
 import org.tdsast.joinus.model.response.AuthLoginResponseData;
 import org.tdsast.joinus.model.response.CurrentUserResponseData;
 import org.tdsast.joinus.model.response.Response;
-import org.tdsast.joinus.model.response.ResponseData;
 import org.tdsast.joinus.service.UserService;
 import org.tdsast.joinus.utils.AuthUtils;
 
@@ -28,8 +24,6 @@ import javax.validation.Valid;
 @RestController
 @RequestMapping("/auth")
 public class AuthController {
-    private Logger logger = LoggerFactory.getLogger(getClass());
-
     private final UserService userService;
 
     @Inject
@@ -53,17 +47,6 @@ public class AuthController {
         String token = JWTUtils.createToken(request.getUsername());
         // 返回结果
         return Response.success(new AuthLoginResponseData(token));
-    }
-
-    @PostMapping("/logout")
-    public Response<ResponseData> logout() {
-        Subject currentUser = SecurityUtils.getSubject();
-        if (currentUser.isAuthenticated()) {
-            currentUser.logout();
-            return Response.success(null);
-        } else {
-            return Response.failure(null, "未登录", 50000);
-        }
     }
 
     private ClubDTO clubToClubDTO(Club club) {
