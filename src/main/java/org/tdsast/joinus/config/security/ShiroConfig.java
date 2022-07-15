@@ -31,7 +31,8 @@ public class ShiroConfig {
         Map<String, String> filterChainDefinitionMap = new LinkedHashMap<>();
 
         filterChainDefinitionMap.put("/auth/current", "jwt");
-        filterChainDefinitionMap.put("/candidate/list", "jwt");
+        filterChainDefinitionMap.put("/candidate/join", "anon");
+        filterChainDefinitionMap.put("/candidate/**", "jwt");
         filterChainDefinitionMap.put("/club/list", "anon");
         filterChainDefinitionMap.put("/club/**", "jwt");
         filterChainDefinitionMap.put("/department/list", "anon");
