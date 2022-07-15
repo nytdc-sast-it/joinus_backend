@@ -16,10 +16,10 @@ public class User extends BaseEntity {
     @Column(nullable = false)
     private String password;
     @OneToOne
-    @JoinColumn(nullable = false)
+    @JoinColumn
     private Club club;
     @OneToOne
-    @JoinColumn(nullable = true)
+    @JoinColumn
     private Department department;
     @Column(nullable = false)
     private Boolean isAdmin = false;
