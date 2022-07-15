@@ -1,7 +1,6 @@
 package org.tdsast.joinus.controller;
 
 import org.apache.shiro.SecurityUtils;
-import org.apache.shiro.authz.annotation.RequiresAuthentication;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.core.io.InputStreamResource;
@@ -35,7 +34,6 @@ import javax.inject.Inject;
 import javax.validation.Valid;
 import java.time.Instant;
 import java.util.List;
-import java.util.Objects;
 import java.util.stream.Collectors;
 
 @RestController
@@ -66,8 +64,9 @@ public class CandidateController {
     }
 
     private Department departmentIdToDepartment(Long clubId, Long departmentId) {
+        Club club = clubService.getClubById(clubId);
         Department department = departmentService.getDepartmentById(departmentId);
-        if (department == null || !Objects.equals(department.getClub().getId(), clubId)) {
+        if (department == null || !club.getDepartments().contains(department)) {
             throw new IllegalArgumentException("社团部门不存在");
         }
         return department;

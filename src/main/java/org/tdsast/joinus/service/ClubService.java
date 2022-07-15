@@ -6,6 +6,7 @@ import org.tdsast.joinus.repository.ClubRepository;
 
 import javax.inject.Inject;
 import java.util.List;
+import java.util.Set;
 
 @Service
 public class ClubService {
@@ -36,7 +37,7 @@ public class ClubService {
         if (isClubExist(name)) {
             throw new IllegalArgumentException("社团已存在");
         }
-        Club club = new Club(name, null, null, null);
+        Club club = new Club(name, Set.of(), null, null, null);
         return clubRepository.save(club);
     }
 
@@ -45,5 +46,9 @@ public class ClubService {
             throw new IllegalArgumentException("社团不存在");
         }
         clubRepository.deleteById(clubId);
+    }
+
+    public Club saveClub(Club club) {
+        return clubRepository.save(club);
     }
 }

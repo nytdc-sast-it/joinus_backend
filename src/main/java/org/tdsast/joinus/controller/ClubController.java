@@ -8,7 +8,9 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.tdsast.joinus.model.dto.ClubDTO;
+import org.tdsast.joinus.model.dto.DepartmentDTO;
 import org.tdsast.joinus.model.entity.Club;
+import org.tdsast.joinus.model.entity.Department;
 import org.tdsast.joinus.model.request.NewClubRequest;
 import org.tdsast.joinus.model.response.ClubListResponseData;
 import org.tdsast.joinus.model.response.ClubResponseData;
@@ -30,8 +32,13 @@ public class ClubController {
         this.clubService = clubService;
     }
 
+    private DepartmentDTO departmentToDepartmentDTO(Department department) {
+        return new DepartmentDTO(department.getId(), department.getName());
+    }
+
     private ClubDTO clubToClubDTO(Club club) {
-        return new ClubDTO(club.getId(), club.getName());
+        return new ClubDTO(club.getId(), club.getName(),
+            club.getDepartments().stream().map(this::departmentToDepartmentDTO).collect(Collectors.toList()));
     }
 
     @GetMapping("/list")

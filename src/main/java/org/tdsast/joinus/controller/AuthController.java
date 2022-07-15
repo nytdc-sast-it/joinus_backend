@@ -9,7 +9,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.tdsast.joinus.config.security.JWTUtils;
 import org.tdsast.joinus.model.dto.ClubDTO;
+import org.tdsast.joinus.model.dto.DepartmentDTO;
 import org.tdsast.joinus.model.entity.Club;
+import org.tdsast.joinus.model.entity.Department;
 import org.tdsast.joinus.model.entity.User;
 import org.tdsast.joinus.model.request.AuthLoginRequest;
 import org.tdsast.joinus.model.response.AuthLoginResponseData;
@@ -20,6 +22,7 @@ import org.tdsast.joinus.utils.AuthUtils;
 
 import javax.inject.Inject;
 import javax.validation.Valid;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/auth")
@@ -49,11 +52,17 @@ public class AuthController {
         return Response.success(new AuthLoginResponseData(token));
     }
 
+
+    private DepartmentDTO departmentToDepartmentDTO(Department department) {
+        return new DepartmentDTO(department.getId(), department.getName());
+    }
+
     private ClubDTO clubToClubDTO(Club club) {
         if (club == null) {
             return null;
         }
-        return new ClubDTO(club.getId(), club.getName());
+        return new ClubDTO(club.getId(), club.getName(),
+            club.getDepartments().stream().map(this::departmentToDepartmentDTO).collect(Collectors.toList()));
     }
 
     @GetMapping("/current")
