@@ -27,7 +27,7 @@ public class SiteController {
     public Response<SiteInfoResponseData> getSite() {
         boolean installed = configurationService.isInstalled();
         if (!installed) {
-            return Response.success(new SiteInfoResponseData(false, null, null));
+            return Response.failure(new SiteInfoResponseData(false, null, null), "未安装", 50000);
         }
         String siteName = configurationService.getSiteName();
         String shortName = configurationService.getShortName();
