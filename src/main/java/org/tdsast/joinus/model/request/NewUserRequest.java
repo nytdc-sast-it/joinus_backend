@@ -8,15 +8,17 @@ public class NewUserRequest {
     @NotBlank
     private String password;
     private Long clubId;
+    private Long departmentId;
     private Boolean admin;
 
     public NewUserRequest() {
     }
 
-    public NewUserRequest(String username, String password, Long clubId, Boolean admin) {
+    public NewUserRequest(String username, String password, Long clubId, Long departmentId, Boolean admin) {
         this.username = username;
         this.password = password;
         this.clubId = clubId;
+        this.departmentId = departmentId;
         this.admin = admin;
     }
 
@@ -42,6 +44,14 @@ public class NewUserRequest {
 
     public void setClubId(Long clubId) {
         this.clubId = clubId;
+    }
+
+    public Long getDepartmentId() {
+        return departmentId;
+    }
+
+    public void setDepartmentId(Long departmentId) {
+        this.departmentId = departmentId;
     }
 
     public Boolean getAdmin() {

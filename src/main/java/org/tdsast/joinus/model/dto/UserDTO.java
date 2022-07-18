@@ -8,12 +8,14 @@ public class UserDTO implements Serializable {
     private Long id;
     private String username;
     private String club;
+    private String department;
     private boolean admin;
 
-    public UserDTO(Long id, String username, String club, boolean admin) {
+    public UserDTO(Long id, String username, String club, String department, boolean admin) {
         this.id = id;
         this.username = username;
         this.club = club;
+        this.department = department;
         this.admin = admin;
     }
 
@@ -39,6 +41,14 @@ public class UserDTO implements Serializable {
 
     public void setClub(String club) {
         this.club = club;
+    }
+
+    public String getDepartment() {
+        return department;
+    }
+
+    public void setDepartment(String department) {
+        this.department = department;
     }
 
     public boolean isAdmin() {

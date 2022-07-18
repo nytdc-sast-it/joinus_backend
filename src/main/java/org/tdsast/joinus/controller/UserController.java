@@ -9,12 +9,14 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.tdsast.joinus.model.dto.UserDTO;
 import org.tdsast.joinus.model.entity.Club;
+import org.tdsast.joinus.model.entity.Department;
 import org.tdsast.joinus.model.entity.User;
 import org.tdsast.joinus.model.request.NewUserRequest;
 import org.tdsast.joinus.model.response.Response;
 import org.tdsast.joinus.model.response.UserListResponseData;
 import org.tdsast.joinus.model.response.UserResponseData;
 import org.tdsast.joinus.service.ClubService;
+import org.tdsast.joinus.service.DepartmentService;
 import org.tdsast.joinus.service.UserService;
 
 import javax.inject.Inject;
@@ -27,19 +29,25 @@ import java.util.stream.Collectors;
 public class UserController {
     private final UserService userService;
     private final ClubService clubService;
+    private final DepartmentService departmentService;
 
     @Inject
-    public UserController(UserService userService, ClubService clubService) {
+    public UserController(UserService userService, ClubService clubService, DepartmentService departmentService) {
         this.userService = userService;
         this.clubService = clubService;
+        this.departmentService = departmentService;
     }
 
     private UserDTO userToUserDTO(User user) {
         Club club = user.getClub();
+        Department department = user.getDepartment();
         if (club == null) {
-            return new UserDTO(user.getId(), user.getUsername(), null, user.getIsAdmin());
+            return new UserDTO(user.getId(), user.getUsername(), null, null, user.getIsAdmin());
         }
-        return new UserDTO(user.getId(), user.getUsername(), user.getClub().getName(), user.getIsAdmin());
+        if (department == null) {
+            return new UserDTO(user.getId(), user.getUsername(), club.getName(), null, user.getIsAdmin());
+        }
+        return new UserDTO(user.getId(), user.getUsername(), club.getName(), department.getName(), user.getIsAdmin());
     }
 
     @GetMapping("/list")
@@ -59,9 +67,22 @@ public class UserController {
         return club;
     }
 
+    private Department departmentIdToDepartment(Club club, Long departmentId) {
+        if (club == null || departmentId == null) {
+            return null;
+        }
+        Department department = departmentService.getDepartmentById(departmentId);
+        if (department == null || !club.getDepartments().contains(department)) {
+            throw new IllegalArgumentException("社团部门不存在");
+        }
+        return department;
+    }
+
     @PostMapping("/new")
     public Response<UserResponseData> newUser(@RequestBody @Valid NewUserRequest request) {
-        User user = userService.addUser(request.getUsername(), request.getPassword(), clubIdToClub(request.getClubId()), request.getAdmin());
+        Club club = clubIdToClub(request.getClubId());
+        Department department = departmentIdToDepartment(club, request.getDepartmentId());
+        User user = userService.addUser(request.getUsername(), request.getPassword(), club, department, request.getAdmin());
         return Response.success(new UserResponseData(userToUserDTO(user)));
     }
 

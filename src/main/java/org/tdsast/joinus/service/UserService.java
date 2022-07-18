@@ -2,6 +2,7 @@ package org.tdsast.joinus.service;
 
 import org.springframework.stereotype.Service;
 import org.tdsast.joinus.model.entity.Club;
+import org.tdsast.joinus.model.entity.Department;
 import org.tdsast.joinus.model.entity.User;
 import org.tdsast.joinus.repository.UserRepository;
 import org.tdsast.joinus.utils.AuthUtils;
@@ -38,7 +39,7 @@ public class UserService {
         return userRepository.findByUsername(username).isPresent();
     }
 
-    public User addUser(String username, String password, Club club, Boolean admin) {
+    public User addUser(String username, String password, Club club, Department department, Boolean admin) {
         if (isUserExist(username)) {
             throw new IllegalArgumentException("User " + username + " already exist");
         }
@@ -46,6 +47,7 @@ public class UserService {
         user.setUsername(username);
         user.setPassword(AuthUtils.getEnPassword(username, password));
         user.setClub(club);
+        user.setDepartment(department);
         user.setIsAdmin(admin);
         return userRepository.save(user);
     }
