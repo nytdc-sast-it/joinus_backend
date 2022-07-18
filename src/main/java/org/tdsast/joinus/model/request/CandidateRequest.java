@@ -7,11 +7,11 @@ import javax.validation.constraints.Size;
 public class CandidateRequest {
     @NotBlank
     private String name;
-    @Size(min = 8, max = 8)
+    @Size(min = 8, max = 8, message = "学号长度必须为8位")
     private String studentId;
-    @Pattern(regexp = "^1[3456789]\\d{9}$")
+    @Pattern(regexp = "^1[3456789]\\d{9}$", message = "手机号码格式不正确")
     private String phone;
-    @Size(min = 5, max = 12)
+    @Size(min = 5, max = 15, message = "QQ号码长度必须为5-15位")
     private String qq;
     @NotBlank
     private String major;
