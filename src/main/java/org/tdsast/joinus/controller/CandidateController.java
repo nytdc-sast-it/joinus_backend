@@ -104,8 +104,9 @@ public class CandidateController {
 
     @GetMapping("/list")
     public Response<CandidateListResponseData> list(@RequestParam int current,
-            @RequestParam int pageSize, @RequestParam(required = false) String name,
-            @RequestParam(name = "club", required = false) Long clubId) {
+                                                    @RequestParam int pageSize, @RequestParam(required = false) String name,
+                                                    @RequestParam(name = "club", required = false) Long clubId,
+                                                    @RequestParam(name = "department", required = false) Long departmentId) {
         String currentUsername = JWTUtils.getUsernameFromToken((String) SecurityUtils.getSubject().getPrincipal());
         User user = userService.getUserByUsername(currentUsername);
         if (Boolean.FALSE.equals(user.getIsAdmin()) && user.getClub() != null) {
@@ -115,15 +116,23 @@ public class CandidateController {
         if (clubId != null) {
             club = clubIdToClub(clubId);
         }
-        List<CandidateDTO> list = candidateService.getCandidates(current, pageSize, name, club)
-                .stream().map(this::candidateToCandidateDTO).collect(Collectors.toList());
-        long total = candidateService.getCandidatesCount(name, club);
+        if (Boolean.FALSE.equals(user.getIsAdmin()) && user.getDepartment() != null) {
+            departmentId = user.getDepartment().getId();
+        }
+        Department department = null;
+        if (departmentId != null) {
+            department = departmentIdToDepartment(clubId, departmentId);
+        }
+        List<CandidateDTO> list = candidateService.getCandidates(current, pageSize, name, club, department)
+            .stream().map(this::candidateToCandidateDTO).collect(Collectors.toList());
+        long total = candidateService.getCandidatesCount(name, club, department);
         return Response.success(new CandidateListResponseData(list, total));
     }
 
     @GetMapping("/export")
     public ResponseEntity<Resource> export(@RequestParam(required = false) String name,
-            @RequestParam(name = "club", required = false) Long clubId) {
+                                           @RequestParam(name = "club", required = false) Long clubId,
+                                           @RequestParam(name = "department", required = false) Long departmentId) {
         String currentUsername = JWTUtils.getUsernameFromToken((String) SecurityUtils.getSubject().getPrincipal());
         User user = userService.getUserByUsername(currentUsername);
         if (Boolean.FALSE.equals(user.getIsAdmin()) && user.getClub() != null) {
@@ -131,16 +140,19 @@ public class CandidateController {
         }
         Club club = null;
         if (clubId != null) {
-            try {
-                club = clubIdToClub(clubId);
-            } catch (IllegalArgumentException e) {
-                return ResponseEntity.badRequest().body(null);
-            }
+            club = clubIdToClub(clubId);
         }
-        InputStreamResource file = new InputStreamResource(candidateService.export(name, club));
+        if (Boolean.FALSE.equals(user.getIsAdmin()) && user.getDepartment() != null) {
+            departmentId = user.getDepartment().getId();
+        }
+        Department department = null;
+        if (departmentId != null) {
+            department = departmentIdToDepartment(clubId, departmentId);
+        }
+        InputStreamResource file = new InputStreamResource(candidateService.export(name, club, department));
         return ResponseEntity.ok()
-                .header(HttpHeaders.CONTENT_DISPOSITION,
-                        "attachment; filename=" + Instant.now() + ".xlsx")
-                .contentType(MediaType.parseMediaType(ExcelHelper.TYPE)).body(file);
+            .header(HttpHeaders.CONTENT_DISPOSITION,
+                "attachment; filename=" + Instant.now() + ".xlsx")
+            .contentType(MediaType.parseMediaType(ExcelHelper.TYPE)).body(file);
     }
 }

@@ -54,6 +54,9 @@ public class AuthController {
 
 
     private DepartmentDTO departmentToDepartmentDTO(Department department) {
+        if (department == null) {
+            return null;
+        }
         return new DepartmentDTO(department.getId(), department.getName());
     }
 
@@ -70,6 +73,6 @@ public class AuthController {
         String currentUsername = JWTUtils.getUsernameFromToken((String) SecurityUtils.getSubject().getPrincipal());
         User user = userService.getUserByUsername(currentUsername);
         return Response.success(new CurrentUserResponseData(user.getId(), user.getUsername(),
-            user.getIsAdmin(), clubToClubDTO(user.getClub())));
+            user.getIsAdmin(), clubToClubDTO(user.getClub()), departmentToDepartmentDTO(user.getDepartment())));
     }
 }

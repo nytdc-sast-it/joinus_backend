@@ -1,6 +1,7 @@
 package org.tdsast.joinus.model.response;
 
 import org.tdsast.joinus.model.dto.ClubDTO;
+import org.tdsast.joinus.model.dto.DepartmentDTO;
 
 import java.io.Serializable;
 
@@ -12,13 +13,15 @@ public class CurrentUserResponseData extends ResponseData implements Serializabl
     private Boolean admin;
     private String role;
     private ClubDTO club;
+    private DepartmentDTO department;
     private String avatar = "https://gw.alipayobjects.com/zos/antfincdn/XAosXuNZyF/BiazfanxmamNRoxxVxka.png";
 
-    public CurrentUserResponseData(Long id, String username, Boolean admin, ClubDTO club) {
+    public CurrentUserResponseData(Long id, String username, Boolean admin, ClubDTO club, DepartmentDTO department) {
         this.id = id;
         this.username = username;
         this.admin = admin;
         this.club = club;
+        this.department = department;
         this.role = Boolean.TRUE.equals(admin) ? "admin" : "user";
     }
 
@@ -52,6 +55,14 @@ public class CurrentUserResponseData extends ResponseData implements Serializabl
 
     public void setClub(ClubDTO club) {
         this.club = club;
+    }
+
+    public DepartmentDTO getDepartment() {
+        return department;
+    }
+
+    public void setDepartment(DepartmentDTO department) {
+        this.department = department;
     }
 
     public Boolean getAdmin() {
