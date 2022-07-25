@@ -59,8 +59,37 @@ public class CandidateService {
         return candidateRepository.count(paramToExample(name, club, department));
     }
 
+    public Candidate getCandidate(Example<Candidate> example) {
+        return candidateRepository.findOne(example).orElse(null);
+    }
+
     public Candidate newCandidate(Candidate candidate) {
-        return candidateRepository.save(candidate);
+        Example<Candidate> example = Example.of(candidate,
+            ExampleMatcher.matching()
+                .withMatcher("name", ExampleMatcher.GenericPropertyMatcher::exact)
+                .withMatcher("studentId", ExampleMatcher.GenericPropertyMatcher::exact)
+                .withMatcher("club", ExampleMatcher.GenericPropertyMatcher::exact)
+                .withIgnorePaths("phone")
+                .withIgnorePaths("qq")
+                .withIgnorePaths("major")
+                .withIgnorePaths("counselor")
+                .withIgnorePaths("choice1")
+                .withIgnorePaths("choice2")
+                .withIgnorePaths("reason")
+        );
+        Candidate c = getCandidate(example);
+        if (c == null) {
+            return candidateRepository.save(candidate);
+        }
+        // 修改
+        c.setPhone(candidate.getPhone());
+        c.setQq(candidate.getQq());
+        c.setMajor(candidate.getMajor());
+        c.setCounselor(candidate.getCounselor());
+        c.setChoice1(candidate.getChoice1());
+        c.setChoice2(candidate.getChoice2());
+        c.setReason(candidate.getReason());
+        return candidateRepository.save(c);
     }
 
     public ByteArrayInputStream export(String name, Club club, Department department) {
