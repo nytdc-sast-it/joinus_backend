@@ -1,5 +1,6 @@
 package org.tdsast.joinus.service;
 
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 import org.tdsast.joinus.model.entity.Configuration;
 import org.tdsast.joinus.model.entity.User;
@@ -20,10 +21,12 @@ public class ConfigurationService {
         this.userRepository = userRepository;
     }
 
+    @Cacheable(value = "configuration", key = "#root.methodName")
     public boolean isInstalled() {
         return configurationRepository.existsById(1);
     }
 
+    @Cacheable(value = "configuration", key = "#root.methodName")
     public String getSiteName() {
         Configuration configuration = configurationRepository.findById(1).orElse(null);
         if (configuration == null) {
@@ -32,6 +35,7 @@ public class ConfigurationService {
         return configuration.getSiteName();
     }
 
+    @Cacheable(value = "configuration", key = "#root.methodName")
     public String getShortName() {
         Configuration configuration = configurationRepository.findById(1).orElse(null);
         if (configuration == null) {

@@ -1,5 +1,6 @@
 package org.tdsast.joinus.service;
 
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Example;
 import org.springframework.data.domain.ExampleMatcher;
 import org.springframework.data.domain.PageRequest;
@@ -23,10 +24,6 @@ public class CandidateService {
         this.candidateRepository = candidateRepository;
     }
 
-    public List<Candidate> getCandidates() {
-        return candidateRepository.findAll();
-    }
-
     private Example<Candidate> paramToExample(String name, Club club, Department department) {
         if (name == null) {
             name = "";
@@ -46,6 +43,7 @@ public class CandidateService {
         return Example.of(candidate, matcher);
     }
 
+    @Cacheable(value = "candidate", key = "{#root.methodName, #current, #size, #name, #club, #department}")
     public List<Candidate> getCandidates(int current, int size, String name, Club club, Department department) {
         if (current == 0 && size == 0) {
             return candidateRepository.findAll(paramToExample(name, club, department));
@@ -55,6 +53,7 @@ public class CandidateService {
             .getContent();
     }
 
+    @Cacheable(value = "candidate", key = "{#root.methodName, #name, #club, #department}")
     public long getCandidatesCount(String name, Club club, Department department) {
         return candidateRepository.count(paramToExample(name, club, department));
     }
@@ -92,6 +91,7 @@ public class CandidateService {
         return candidateRepository.save(c);
     }
 
+    @Cacheable(value = "candidate", key = "{#root.methodName, #name, #club, #department}")
     public ByteArrayInputStream export(String name, Club club, Department department) {
         List<Candidate> candidates = getCandidates(0, 0, name, club, department);
         return ExcelHelper.candidatesToExcel(candidates);

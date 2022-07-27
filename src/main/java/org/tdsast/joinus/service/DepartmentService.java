@@ -1,12 +1,12 @@
 package org.tdsast.joinus.service;
 
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 import org.tdsast.joinus.model.entity.Club;
 import org.tdsast.joinus.model.entity.Department;
 import org.tdsast.joinus.repository.DepartmentRepository;
 
 import javax.inject.Inject;
-import java.util.List;
 
 @Service
 public class DepartmentService {
@@ -19,10 +19,7 @@ public class DepartmentService {
         this.clubService = clubService;
     }
 
-    public List<Department> getDepartments() {
-        return departmentRepository.findAll();
-    }
-
+    @Cacheable(value = "department", key = "#departmentId")
     public Department getDepartmentById(Long departmentId) {
         return departmentRepository.findById(departmentId).orElse(null);
     }
@@ -38,13 +35,5 @@ public class DepartmentService {
         club.getDepartments().add(department);
         clubService.saveClub(club);
         return department;
-    }
-
-    public void removeDepartment(Long departmentId) {
-        Department department = departmentRepository.findById(departmentId).orElse(null);
-        if (department == null) {
-            throw new IllegalArgumentException("部门不存在");
-        }
-        departmentRepository.deleteById(departmentId);
     }
 }

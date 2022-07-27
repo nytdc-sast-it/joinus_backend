@@ -1,5 +1,7 @@
 package org.tdsast.joinus.service;
 
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 import org.tdsast.joinus.model.entity.Club;
 import org.tdsast.joinus.repository.ClubRepository;
@@ -17,10 +19,12 @@ public class ClubService {
         this.clubRepository = clubRepository;
     }
 
+    @Cacheable(value = "club", key = "#root.methodName")
     public List<Club> getClubs() {
         return clubRepository.findAll();
     }
 
+    @Cacheable(value = "club", key = "#clubId")
     public Club getClubById(Long clubId) {
         return clubRepository.findById(clubId).orElse(null);
     }
@@ -41,6 +45,7 @@ public class ClubService {
         return clubRepository.save(club);
     }
 
+    @CacheEvict(value = "club", key = "#clubId")
     public void removeClub(Long clubId) {
         if (!isClubExist(clubId)) {
             throw new IllegalArgumentException("社团不存在");

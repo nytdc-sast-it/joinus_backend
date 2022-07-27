@@ -10,3 +10,7 @@ spring:
     show-sql: true
   jackson:
     default-property-inclusion: NON_NULL
+  cache:
+    type: caffeine
+    caffeine:
+      spec: initialCapacity=10
