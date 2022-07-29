@@ -20,17 +20,14 @@ public class UserService {
         this.userRepository = userRepository;
     }
 
-    @Cacheable(value = "user", key = "#root.methodName")
     public List<User> getUsers() {
         return userRepository.findAll();
     }
 
-    @Cacheable(value = "user", key = "{#root.methodName, #id}")
     public User getUserById(Long id) {
         return userRepository.findById(id).orElse(null);
     }
 
-    @Cacheable(value = "user", key = "{#root.methodName, #username}")
     public User getUserByUsername(String username) {
         return userRepository.findByUsername(username).orElse(null);
     }
