@@ -1,8 +1,8 @@
 spring:
   datasource:
-    url: jdbc:postgresql://${PG_HOST:localhost}:${PG_PORT:5432}/${PG_DATABASE:joinus2022}
-    username: ${PG_USER:postgres}
-    password: ${PG_PASSWORD:12345678}
+    url: jdbc:postgresql://${PG_HOST:localhost}:${PG_PORT:5432}/${PG_DATABASE:joinus_dev}
+    username: ${PG_USER:joinus}
+    password: ${PG_PASSWORD:123456}
     driver-class-name: org.postgresql.Driver
   jpa:
     hibernate:
