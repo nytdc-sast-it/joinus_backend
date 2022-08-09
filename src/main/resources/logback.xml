@@ -20,5 +20,5 @@
         <appender-ref ref="STDOUT"/>
         <appender-ref ref="FILE"/>
     </root>
-    <logger name="org.tdsast" level="DEBUG"/>
+    <logger name="com.sastit" level="DEBUG"/>
 </configuration>
