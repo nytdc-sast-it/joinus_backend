@@ -44,6 +44,15 @@ public class ConfigurationService {
         return configuration.getShortName();
     }
 
+    @Cacheable(value = "api", key = "#root.methodName")
+    public Boolean getApiClosed() {
+        Configuration configuration = configurationRepository.findById(1).orElse(null);
+        if (configuration == null) {
+            return null;
+        }
+        return configuration.getApiClosed();
+    }
+
     public void install(String siteName, String shortName, String admin, String password) {
         Configuration configuration = new Configuration();
         configuration.setSiteName(siteName);

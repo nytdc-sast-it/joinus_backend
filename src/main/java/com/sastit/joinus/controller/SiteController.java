@@ -27,11 +27,12 @@ public class SiteController {
     public Response<SiteInfoResponseData> getSite() {
         boolean installed = configurationService.isInstalled();
         if (!installed) {
-            return Response.failure(new SiteInfoResponseData(false, null, null), "未安装", 50000);
+            return Response.failure(new SiteInfoResponseData(false, null, null, null), "未安装", 50000);
         }
         String siteName = configurationService.getSiteName();
         String shortName = configurationService.getShortName();
-        return Response.success(new SiteInfoResponseData(true, siteName, shortName));
+        Boolean apiClosed = configurationService.getApiClosed();
+        return Response.success(new SiteInfoResponseData(true, siteName, shortName, apiClosed));
     }
 
     @PostMapping("/install")

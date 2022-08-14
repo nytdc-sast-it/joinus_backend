@@ -24,6 +24,7 @@ public class CacheConfiguration {
                 buildCache("user", ticker, 3, TimeUnit.SECONDS),            // 用户缓存 3 秒
                 buildCache("candidate", ticker, 3, TimeUnit.SECONDS),       // 申请缓存 3 秒
                 buildCache("club", ticker, 1, TimeUnit.MINUTES),            // 社团缓存 1 分钟
+                buildCache("api", ticker, 1, TimeUnit.MINUTES),             // 申请接口状态 缓存 1 分钟
                 buildCache("department", ticker, 1, TimeUnit.MINUTES)       // 部门缓存 1 分钟
             )
         );

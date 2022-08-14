@@ -14,14 +14,16 @@ public class Configuration {
     private Integer id;
     private String siteName;
     private String shortName;
+    private Boolean apiClosed = Boolean.FALSE;
 
     public Configuration() {
     }
 
-    public Configuration(Integer id, String siteName, String shortName) {
+    public Configuration(Integer id, String siteName, String shortName, Boolean apiClosed) {
         this.id = id;
         this.siteName = siteName;
         this.shortName = shortName;
+        this.apiClosed = apiClosed;
     }
 
     public Integer getId() {
@@ -46,5 +48,13 @@ public class Configuration {
 
     public void setSiteName(String siteName) {
         this.siteName = siteName;
+    }
+
+    public Boolean getApiClosed() {
+        return apiClosed;
+    }
+
+    public void setApiClosed(Boolean apiClosed) {
+        this.apiClosed = apiClosed;
     }
 }
