@@ -10,13 +10,15 @@ public class UserDTO implements Serializable {
     private String club;
     private String department;
     private boolean admin;
+    private Boolean pwdNeedModified;
 
-    public UserDTO(Long id, String username, String club, String department, boolean admin) {
+    public UserDTO(Long id, String username, String club, String department, boolean admin,Boolean pwdNeedModified) {
         this.id = id;
         this.username = username;
         this.club = club;
         this.department = department;
         this.admin = admin;
+        this.pwdNeedModified = pwdNeedModified;
     }
 
     public Long getId() {
@@ -57,5 +59,13 @@ public class UserDTO implements Serializable {
 
     public void setAdmin(boolean admin) {
         this.admin = admin;
+    }
+
+    public Boolean getPwdNeedModified() {
+        return pwdNeedModified;
+    }
+
+    public void setPwdNeedModified(Boolean pwdNeedModified) {
+        this.pwdNeedModified = pwdNeedModified;
     }
 }

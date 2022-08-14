@@ -42,12 +42,12 @@ public class UserController {
         Club club = user.getClub();
         Department department = user.getDepartment();
         if (club == null) {
-            return new UserDTO(user.getId(), user.getUsername(), null, null, user.getIsAdmin());
+            return new UserDTO(user.getId(), user.getUsername(), null, null, user.getIsAdmin(), user.getPwdNeedModified());
         }
         if (department == null) {
-            return new UserDTO(user.getId(), user.getUsername(), club.getName(), null, user.getIsAdmin());
+            return new UserDTO(user.getId(), user.getUsername(), club.getName(), null, user.getIsAdmin(), user.getPwdNeedModified());
         }
-        return new UserDTO(user.getId(), user.getUsername(), club.getName(), department.getName(), user.getIsAdmin());
+        return new UserDTO(user.getId(), user.getUsername(), club.getName(), department.getName(), user.getIsAdmin(), user.getPwdNeedModified());
     }
 
     @GetMapping("/list")

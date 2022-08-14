@@ -47,6 +47,7 @@ public class UserService {
         user.setClub(club);
         user.setDepartment(department);
         user.setIsAdmin(admin);
+        user.setPwdNeedModified(true);
         return userRepository.save(user);
     }
 

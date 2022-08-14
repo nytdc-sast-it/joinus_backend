@@ -72,7 +72,11 @@ public class AuthController {
     public Response<CurrentUserResponseData> currentUser() {
         String currentUsername = JWTUtils.getUsernameFromToken((String) SecurityUtils.getSubject().getPrincipal());
         User user = userService.getUserByUsername(currentUsername);
-        return Response.success(new CurrentUserResponseData(user.getId(), user.getUsername(),
-            user.getIsAdmin(), clubToClubDTO(user.getClub()), departmentToDepartmentDTO(user.getDepartment())));
+        return Response.success(
+            new CurrentUserResponseData(user.getId(), user.getUsername(),
+                user.getIsAdmin(), clubToClubDTO(user.getClub()), departmentToDepartmentDTO(user.getDepartment()),
+                user.getPwdNeedModified()
+            )
+        );
     }
 }

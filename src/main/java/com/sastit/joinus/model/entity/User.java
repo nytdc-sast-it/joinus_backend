@@ -23,18 +23,21 @@ public class User extends BaseEntity {
     private Department department;
     @Column(nullable = false)
     private Boolean isAdmin = false;
+    private Boolean pwdNeedModified = Boolean.TRUE;
 
     public User() {
     }
 
     public User(String username, String password, Club club,
-                Department department, Boolean isAdmin, Long id, Instant createdAt, Instant updatedAt) {
+                Department department, Boolean isAdmin, Boolean pwdNeedModified,
+                Long id, Instant createdAt, Instant updatedAt) {
         super(id, createdAt, updatedAt);
         this.username = username;
         this.password = password;
         this.club = club;
         this.department = department;
         this.isAdmin = isAdmin;
+        this.pwdNeedModified = pwdNeedModified;
     }
 
     public String getUsername() {
@@ -77,22 +80,33 @@ public class User extends BaseEntity {
         this.isAdmin = isAdmin;
     }
 
+    public Boolean getAdmin() {
+        return isAdmin;
+    }
+
+    public void setAdmin(Boolean admin) {
+        isAdmin = admin;
+    }
+
+    public Boolean getPwdNeedModified() {
+        return pwdNeedModified;
+    }
+
+    public void setPwdNeedModified(Boolean pwdNeedModified) {
+        this.pwdNeedModified = pwdNeedModified;
+    }
+
     @Override
     public boolean equals(Object o) {
-        if (this == o)
-            return true;
-        if (o == null || getClass() != o.getClass())
-            return false;
-        if (!super.equals(o))
-            return false;
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        if (!super.equals(o)) return false;
         User user = (User) o;
-        return Objects.equals(username, user.username) && Objects.equals(password, user.password)
-            && Objects.equals(club, user.club) && Objects.equals(department, user.department)
-            && Objects.equals(isAdmin, user.isAdmin);
+        return Objects.equals(username, user.username) && Objects.equals(password, user.password) && Objects.equals(club, user.club) && Objects.equals(department, user.department) && Objects.equals(isAdmin, user.isAdmin) && Objects.equals(pwdNeedModified, user.pwdNeedModified);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(super.hashCode(), username, password, club, department, isAdmin);
+        return Objects.hash(super.hashCode(), username, password, club, department, isAdmin, pwdNeedModified);
     }
 }

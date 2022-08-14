@@ -70,7 +70,8 @@ public class ConfigurationService {
         userRepository.save(new User(
                 admin,
                 AuthUtils.getEnPassword(admin, password),
-                null, null, true, null, null, null
+                null, null, true, false,
+                null, null, null
             )
         );
         configurationRepository.save(configuration);

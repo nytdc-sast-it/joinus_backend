@@ -15,14 +15,16 @@ public class CurrentUserResponseData extends ResponseData implements Serializabl
     private ClubDTO club;
     private DepartmentDTO department;
     private String avatar = "https://gw.alipayobjects.com/zos/antfincdn/XAosXuNZyF/BiazfanxmamNRoxxVxka.png";
+    private Boolean pwdNeedModified;
 
-    public CurrentUserResponseData(Long id, String username, Boolean admin, ClubDTO club, DepartmentDTO department) {
+    public CurrentUserResponseData(Long id, String username, Boolean admin, ClubDTO club, DepartmentDTO department, Boolean pwdNeedModified) {
         this.id = id;
         this.username = username;
         this.admin = admin;
         this.club = club;
         this.department = department;
         this.role = Boolean.TRUE.equals(admin) ? "admin" : "user";
+        this.pwdNeedModified = pwdNeedModified;
     }
 
     public Long getId() {
@@ -79,5 +81,13 @@ public class CurrentUserResponseData extends ResponseData implements Serializabl
 
     public void setRole(String role) {
         this.role = role;
+    }
+
+    public Boolean getPwdNeedModified() {
+        return pwdNeedModified;
+    }
+
+    public void setPwdNeedModified(Boolean pwdNeedModified) {
+        this.pwdNeedModified = pwdNeedModified;
     }
 }
