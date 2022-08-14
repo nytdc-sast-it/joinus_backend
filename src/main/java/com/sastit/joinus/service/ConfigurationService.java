@@ -5,6 +5,7 @@ import com.sastit.joinus.model.entity.User;
 import com.sastit.joinus.repository.ConfigurationRepository;
 import com.sastit.joinus.repository.UserRepository;
 import com.sastit.joinus.utils.AuthUtils;
+import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
@@ -44,13 +45,22 @@ public class ConfigurationService {
         return configuration.getShortName();
     }
 
-    @Cacheable(value = "api", key = "#root.methodName")
+    @Cacheable(value = "api")
     public Boolean getApiClosed() {
         Configuration configuration = configurationRepository.findById(1).orElse(null);
         if (configuration == null) {
             return null;
         }
         return configuration.getApiClosed();
+    }
+
+    @CacheEvict(value = "api")
+    public void switchStatus() {
+        Configuration configuration = configurationRepository.findById(1).orElse(null);
+        if (configuration != null) {
+            configuration.setApiClosed(!configuration.getApiClosed());
+            configurationRepository.save(configuration);
+        }
     }
 
     public void install(String siteName, String shortName, String admin, String password) {

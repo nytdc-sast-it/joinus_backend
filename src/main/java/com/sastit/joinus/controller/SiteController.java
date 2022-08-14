@@ -43,4 +43,10 @@ public class SiteController {
         configurationService.install(request.getSiteName(), request.getShortName(), request.getAdmin(), request.getPassword());
         return getSite();
     }
+
+    @PostMapping("/switch")
+    public Response<SiteInfoResponseData> switchApiStatus() {
+        configurationService.switchStatus();
+        return getSite();
+    }
 }

@@ -30,6 +30,7 @@ public class ShiroConfig {
         // 拦截器
         Map<String, String> filterChainDefinitionMap = new LinkedHashMap<>();
 
+        filterChainDefinitionMap.put("/site/switch", "jwt");
         filterChainDefinitionMap.put("/site/**", "anon");
         filterChainDefinitionMap.put("/auth/current", "jwt");
         filterChainDefinitionMap.put("/candidate/join", "anon");
