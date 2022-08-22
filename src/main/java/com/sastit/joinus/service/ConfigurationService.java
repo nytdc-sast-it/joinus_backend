@@ -63,6 +63,7 @@ public class ConfigurationService {
         }
     }
 
+    @CacheEvict(value = "configuration", allEntries = true)
     public void install(String siteName, String shortName, String admin, String password) {
         Configuration configuration = new Configuration();
         configuration.setSiteName(siteName);

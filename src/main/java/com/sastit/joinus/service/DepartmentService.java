@@ -3,6 +3,7 @@ package com.sastit.joinus.service;
 import com.sastit.joinus.model.entity.Club;
 import com.sastit.joinus.model.entity.Department;
 import com.sastit.joinus.repository.DepartmentRepository;
+import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
@@ -24,6 +25,7 @@ public class DepartmentService {
         return departmentRepository.findById(departmentId).orElse(null);
     }
 
+    @CacheEvict(value = "department", allEntries = true)
     public Department newDepartment(Long clubId, String departmentName) {
         Club club = clubService.getClubById(clubId);
         if (club == null) {

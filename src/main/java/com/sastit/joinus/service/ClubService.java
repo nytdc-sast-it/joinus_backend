@@ -37,6 +37,7 @@ public class ClubService {
         return clubRepository.existsById(id);
     }
 
+    @CacheEvict(value = "club", allEntries = true)
     public Club newClub(String name) {
         if (isClubExist(name)) {
             throw new IllegalArgumentException("社团已存在");
@@ -45,7 +46,7 @@ public class ClubService {
         return clubRepository.save(club);
     }
 
-    @CacheEvict(value = "club", key = "#clubId")
+    @CacheEvict(value = "club", allEntries = true)
     public void removeClub(Long clubId) {
         if (!isClubExist(clubId)) {
             throw new IllegalArgumentException("社团不存在");
@@ -53,6 +54,7 @@ public class ClubService {
         clubRepository.deleteById(clubId);
     }
 
+    @CacheEvict(value = "club", allEntries = true)
     public Club saveClub(Club club) {
         return clubRepository.save(club);
     }
