@@ -2,6 +2,7 @@ package com.sastit.joinus.model.entity;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import java.time.Instant;
@@ -13,7 +14,7 @@ import java.util.Set;
 public class Club extends BaseEntity {
     @Column(nullable = false)
     private String name;
-    @OneToMany
+    @OneToMany(fetch = FetchType.EAGER)
     private Set<Department> departments;
 
     public Club() {
